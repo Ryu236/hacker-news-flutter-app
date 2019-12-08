@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -27,7 +29,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  String _data = '';
+  List<String> _titles = <String>[];
 
   @override
   void initState() {
@@ -37,8 +39,13 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Future<void> _load() async {
     final res = await http.get('https://api.hnpwa.com/v0/news/1.json');
+    final data = json.decode(res.body);
     setState(() {
-      _data = res.body;
+      final items = data as List;
+      items.forEach((dynamic element) {
+        final item = element as Map;
+        _titles.add(item['title'] as String);
+      });
     });
   }
 
@@ -48,7 +55,17 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      body: Text(_data),
+      body: ListView.builder(
+        itemBuilder: (BuildContext context, int index) {
+          if (index >= _titles.length) {
+            return null;
+          }
+
+          return ListTile(
+            title: Text(_titles[index]),
+          );
+        },
+      ),
     );
   }
 }
