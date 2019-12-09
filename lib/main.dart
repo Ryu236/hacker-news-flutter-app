@@ -30,6 +30,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   List<String> _titles = <String>[];
+  final _biggerFont = const TextStyle(fontSize: 18.0);
 
   @override
   void initState() {
@@ -55,16 +56,29 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      body: ListView.builder(
+      body: _buildItems(),
+    );
+  }
+
+  Widget _buildItems() {
+    return ListView.builder(
+        padding: const EdgeInsets.all(16.0),
         itemBuilder: (BuildContext context, int index) {
-          if (index >= _titles.length) {
+          if (index.isOdd) return Divider();
+
+          final i = index ~/ 2;
+          if (i >= _titles.length) {
             return null;
           }
+          return _buildRow(_titles[i]);
+        });
+  }
 
-          return ListTile(
-            title: Text(_titles[index]),
-          );
-        },
+  Widget _buildRow(String item) {
+    return ListTile(
+      title: Text(
+        item,
+        style: _biggerFont,
       ),
     );
   }
