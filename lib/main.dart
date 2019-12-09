@@ -28,6 +28,26 @@ class MyHomePage extends StatefulWidget {
   _MyHomePageState createState() => _MyHomePageState();
 }
 
+class Item {
+  final String title;
+  final int point;
+  final String user;
+  final String timeAgo;
+  final int commentsCount;
+  final String url;
+  final String domain;
+
+  Item({
+    this.title,
+    this.point,
+    this.user,
+    this.timeAgo,
+    this.commentsCount,
+    this.url,
+    this.domain,
+  });
+}
+
 class _MyHomePageState extends State<MyHomePage> {
   List<String> _titles = <String>[];
   final _biggerFont = const TextStyle(fontSize: 18.0);
