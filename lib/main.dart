@@ -1,7 +1,9 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:webview_flutter/webview_flutter.dart';
 
 void main() => runApp(MyApp());
 
@@ -49,7 +51,7 @@ class Item {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  List<String> _titles = <String>[];
+  List<Item> _items = <Item>[];
   final _biggerFont = const TextStyle(fontSize: 18.0);
 
   @override
@@ -65,7 +67,15 @@ class _MyHomePageState extends State<MyHomePage> {
       final items = data as List;
       items.forEach((dynamic element) {
         final item = element as Map;
-        _titles.add(item['title'] as String);
+        _items.add(Item(
+          title: item['title'] as String,
+          point: item['point'] as int,
+          user: item['user'] as String,
+          timeAgo: item['time_ago'] as String,
+          commentsCount: item['comment_count'] as int,
+          url: item['url'] as String,
+          domain: item['domain'] as String,
+        ));
       });
     });
   }
@@ -87,18 +97,53 @@ class _MyHomePageState extends State<MyHomePage> {
           if (index.isOdd) return Divider();
 
           final i = index ~/ 2;
-          if (i >= _titles.length) {
+          if (i >= _items.length) {
             return null;
           }
-          return _buildRow(_titles[i]);
+          return _buildRow(context, _items[i]);
         });
   }
 
-  Widget _buildRow(String item) {
+  Widget _buildRow(BuildContext context, Item item) {
     return ListTile(
       title: Text(
-        item,
+        item.title,
         style: _biggerFont,
+      ),
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => WebViewPage(url: item.url)),
+        );
+      },
+    );
+  }
+}
+
+class WebViewPage extends StatefulWidget {
+  WebViewPage({Key key, @required this.url}) : super(key: key);
+  final String url;
+
+  @override
+  _WebViewPageState createState() => _WebViewPageState();
+}
+
+class _WebViewPageState extends State<WebViewPage> {
+  final Completer<WebViewController> _controller =
+      Completer<WebViewController>();
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("WebView"),
+      ),
+      body: WebView(
+        initialUrl: (widget.url),
+        javascriptMode: JavascriptMode.unrestricted,
+        onWebViewCreated: (WebViewController webViewController) {
+          print("WebView Created!");
+        },
       ),
     );
   }
