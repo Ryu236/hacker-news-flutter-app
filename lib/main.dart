@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:share/share.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 void main() => runApp(MyApp());
@@ -137,6 +138,14 @@ class _WebViewPageState extends State<WebViewPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text("WebView"),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.share),
+            onPressed: () {
+              Share.share(widget.url);
+            },
+          ),
+        ],
       ),
       body: WebView(
         initialUrl: (widget.url),
