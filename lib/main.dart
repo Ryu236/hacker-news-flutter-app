@@ -68,7 +68,7 @@ class _MyHomePageState extends State<MyHomePage> {
     final dynamic data = json.decode(responseBody);
     setState(() {
       final items = data as List;
-      items.forEach((dynamic element) {
+      for (dynamic element in items) {
         final item = element as Map;
         _items.add(Item(
           title: item['title'] as String,
@@ -79,7 +79,7 @@ class _MyHomePageState extends State<MyHomePage> {
           url: item['url'] as String,
           domain: item['domain'] as String,
         ));
-      });
+      }
     });
   }
 
