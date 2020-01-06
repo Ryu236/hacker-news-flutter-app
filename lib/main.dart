@@ -111,6 +111,7 @@ class _MyHomePageState extends State<MyHomePage> {
         item.title,
         style: _biggerFont,
       ),
+      subtitle: Text(item.domain),
       onTap: () {
         Navigator.push(
           context,
