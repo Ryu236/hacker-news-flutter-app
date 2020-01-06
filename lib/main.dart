@@ -62,8 +62,10 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Future<void> _load() async {
-    final res = await http.get('https://api.hnpwa.com/v0/news/1.json');
-    final data = json.decode(res.body);
+    final http.Response res =
+        await http.get('https://api.hnpwa.com/v0/news/1.json');
+    final String responseBody = utf8.decode(res.bodyBytes);
+    final dynamic data = json.decode(responseBody);
     setState(() {
       final items = data as List;
       items.forEach((dynamic element) {
