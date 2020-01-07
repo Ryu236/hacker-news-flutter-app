@@ -33,7 +33,7 @@ class MyHomePage extends StatefulWidget {
 
 class Item {
   final String title;
-  final int point;
+  final int points;
   final String user;
   final String timeAgo;
   final int commentsCount;
@@ -42,7 +42,7 @@ class Item {
 
   Item({
     this.title,
-    this.point,
+    this.points,
     this.user,
     this.timeAgo,
     this.commentsCount,
@@ -72,7 +72,7 @@ class _MyHomePageState extends State<MyHomePage> {
         final item = element as Map;
         _items.add(Item(
           title: item['title'] as String,
-          point: item['point'] as int,
+          points: item['points'] as int,
           user: item['user'] as String,
           timeAgo: item['time_ago'] as String,
           commentsCount: item['comment_count'] as int,
@@ -113,7 +113,7 @@ class _MyHomePageState extends State<MyHomePage> {
         item.title,
         style: _biggerFont,
       ),
-      subtitle: Text(item.domain),
+      subtitle: Text(item.domain + '・' + item.points.toString() + 'points'),
       onTap: () {
         Navigator.push(
           context,
