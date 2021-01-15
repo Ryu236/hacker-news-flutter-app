@@ -108,12 +108,18 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Widget _buildRow(BuildContext context, Item item) {
+    Text subTitle;
+    if (item.domain == null) {
+      subTitle = Text(item.points.toString() + 'points');
+    } else {
+      subTitle = Text(item.domain + '・' + item.points.toString() + 'points');
+    }
     return ListTile(
       title: Text(
         item.title,
         style: _biggerFont,
       ),
-      subtitle: Text(item.domain + '・' + item.points.toString() + 'points'),
+      subtitle: subTitle,
       onTap: () {
         Navigator.push(
           context,
