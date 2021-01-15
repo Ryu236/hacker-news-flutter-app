@@ -64,8 +64,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Future<void> _load() async {
     final http.Response res =
         await http.get('https://api.hnpwa.com/v0/news/1.json');
-    final String responseBody = utf8.decode(res.bodyBytes);
-    final dynamic data = json.decode(responseBody);
+    final dynamic data = json.decode(utf8.decode(res.bodyBytes));
     setState(() {
       final items = data as List;
       for (dynamic element in items) {
@@ -94,7 +93,8 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Widget _buildItems() {
-    return ListView.builder(
+    return RefreshIndicator(
+      child: ListView.builder(
         padding: const EdgeInsets.all(16.0),
         itemBuilder: (BuildContext context, int index) {
           if (index.isOdd) return Divider();
@@ -104,7 +104,13 @@ class _MyHomePageState extends State<MyHomePage> {
             return null;
           }
           return _buildRow(context, _items[i]);
-        });
+        },
+      ),
+      onRefresh: () async {
+        _items.clear();
+        await _load();
+      },
+    );
   }
 
   Widget _buildRow(BuildContext context, Item item) {
