@@ -54,16 +54,17 @@ class Item {
 class _MyHomePageState extends State<MyHomePage> {
   List<Item> _items = <Item>[];
   final _biggerFont = const TextStyle(fontSize: 18.0);
+  var _pageIndex = 1;
 
   @override
   void initState() {
     super.initState();
-    _load();
+    _load(_pageIndex);
   }
 
-  Future<void> _load() async {
+  Future<void> _load(int index) async {
     final http.Response res =
-        await http.get('https://api.hnpwa.com/v0/news/1.json');
+        await http.get('https://api.hnpwa.com/v0/news/${index}.json');
     final dynamic data = json.decode(utf8.decode(res.bodyBytes));
     setState(() {
       final items = data as List;
@@ -97,10 +98,22 @@ class _MyHomePageState extends State<MyHomePage> {
       child: ListView.builder(
         padding: const EdgeInsets.all(16.0),
         itemBuilder: (BuildContext context, int index) {
-          if (index.isOdd) return Divider();
-
           final i = index ~/ 2;
-          if (i >= _items.length) {
+          // Add a line between item in list.
+          if (index.isOdd) return Divider();
+          if (i == _items.length) {
+            // Add a button to load more items.
+            return Container(
+              child: TextButton(
+                child: Text("Load More"),
+                onPressed: () {
+                  _pageIndex++;
+                  print("Pressed! index: ${_pageIndex}");
+                  _load(_pageIndex);
+                },
+              ),
+            );
+          } else if (i > _items.length) {
             return null;
           }
           return _buildRow(context, _items[i]);
@@ -108,7 +121,8 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       onRefresh: () async {
         _items.clear();
-        await _load();
+        _pageIndex = 1;
+        await _load(_pageIndex);
       },
     );
   }
