@@ -63,24 +63,40 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Future<void> _load(int index) async {
-    final http.Response res =
-        await http.get('https://api.hnpwa.com/v0/news/${index}.json');
-    final dynamic data = json.decode(utf8.decode(res.bodyBytes));
-    setState(() {
-      final items = data as List;
-      for (dynamic element in items) {
-        final item = element as Map;
-        _items.add(Item(
-          title: item['title'] as String,
-          points: item['points'] as int,
-          user: item['user'] as String,
-          timeAgo: item['time_ago'] as String,
-          commentsCount: item['comment_count'] as int,
-          url: item['url'] as String,
-          domain: item['domain'] as String,
-        ));
-      }
-    });
+    try {
+      final http.Response res =
+          await http.get('https://api.hnpwa.com/v0/news/${index}.json');
+      final dynamic data = json.decode(utf8.decode(res.bodyBytes));
+      setState(() {
+        final items = data as List;
+        for (dynamic element in items) {
+          final item = element as Map;
+          _items.add(Item(
+            title: item['title'] as String,
+            points: item['points'] as int,
+            user: item['user'] as String,
+            timeAgo: item['time_ago'] as String,
+            commentsCount: item['comment_count'] as int,
+            url: item['url'] as String,
+            domain: item['domain'] as String,
+          ));
+        }
+      });
+    } catch (e) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return const SimpleDialog(
+            title: const Text('Error occurred'),
+            children: <Widget>[
+              SimpleDialogOption(
+                child: const Text('Sorry, couldn\'t load items.'),
+              )
+            ],
+          );
+        },
+      );
+    }
   }
 
   @override
