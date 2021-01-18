@@ -1,16 +1,16 @@
 # hacker_news_app
 
-A new Flutter application of Hacker News.
+This is a Flutter application of Hacker News.
 
-## Getting Started
+## Features
 
-This project is a starting point for a Flutter application.
+This app has the following functions.
 
-A few resources to get you started if this is your first Flutter project:
+* Display list view of hacker news items
+* Show the article on webview when click the items
+* Share the url of the item
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+## Screenshots
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+<img src="img/listview_img.png" width="40%" />
+<img src="img/share_img.png" width="40%" />
