@@ -124,7 +124,6 @@ class _MyHomePageState extends State<MyHomePage> {
                 child: Text("Load More"),
                 onPressed: () {
                   _pageIndex++;
-                  print("Pressed! index: ${_pageIndex}");
                   _load(_pageIndex);
                 },
               ),
