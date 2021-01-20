@@ -52,7 +52,7 @@ class Item {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  List<Item> _items = <Item>[];
+  final List<Item> _items = <Item>[];
   final _biggerFont = const TextStyle(fontSize: 18.0);
   var _pageIndex = 1;
 
@@ -112,6 +112,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget _buildItems() {
     return RefreshIndicator(
       child: ListView.builder(
+        key: Key('hacker_news_list'),
         padding: const EdgeInsets.all(16.0),
         itemBuilder: (BuildContext context, int index) {
           final i = index ~/ 2;
@@ -121,7 +122,10 @@ class _MyHomePageState extends State<MyHomePage> {
             // Add a button to load more items.
             return Container(
               child: TextButton(
-                child: Text("Load More"),
+                child: const Text(
+                  'Load More',
+                  key: Key('load_more_button'),
+                ),
                 onPressed: () {
                   _pageIndex++;
                   _load(_pageIndex);
