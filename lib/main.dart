@@ -148,10 +148,14 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Widget _buildRow(BuildContext context, Item item) {
     Text subTitle;
-    if (item.domain == null) {
+    if (item.domain != null && item.points != null) {
+      subTitle = Text(item.domain + '・' + item.points.toString() + 'points');
+    } else if (item.domain != null && item.points == null) {
+      subTitle = Text(item.domain);
+    } else if (item.domain == null && item.points != null) {
       subTitle = Text(item.points.toString() + 'points');
     } else {
-      subTitle = Text(item.domain + '・' + item.points.toString() + 'points');
+      subTitle = null;
     }
     return ListTile(
       title: Text(
