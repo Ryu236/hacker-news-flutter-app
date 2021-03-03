@@ -113,7 +113,7 @@ class _MyHomePageState extends State<MyHomePage> {
     return RefreshIndicator(
       child: ListView.builder(
         key: Key('hacker_news_list'),
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(8.0),
         itemBuilder: (BuildContext context, int index) {
           final i = index ~/ 2;
           // Add a line between item in list.
