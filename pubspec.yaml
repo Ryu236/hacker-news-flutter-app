@@ -14,7 +14,7 @@ description: A new Flutter application of Hacker News.
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.1.0 <3.0.0"
+  sdk: ">=2.5.0 <3.0.0"
 
 dependencies:
   flutter:
@@ -25,7 +25,7 @@ dependencies:
   cupertino_icons: ^0.1.2
   http: any
   webview_flutter: '>=1.0.7'
-  share: '>=0.6.4 <2.0.0'
+  share: '>=2.0.0'
 
 dev_dependencies:
   flutter_test:
@@ -34,7 +34,7 @@ dev_dependencies:
     sdk: flutter
   test: any
   mockito: any
-  flutter_launcher_icons: "^0.8.0"
+  flutter_launcher_icons: any
 
 flutter_icons:
   android: true
