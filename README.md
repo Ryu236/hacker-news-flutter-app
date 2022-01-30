@@ -1,4 +1,4 @@
-# hacker_news_app
+# hacker-news-app
 
 This is a Flutter application of Hacker News.
 
