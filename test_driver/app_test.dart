@@ -4,8 +4,8 @@ import 'package:test/test.dart';
 void main() {
   group('Scroll listview', () {
     FlutterDriver driver;
-    final listFinder = find.byValueKey('hacker_news_list');
-    final itemFinder = find.byValueKey('load_more_button');
+    final SerializableFinder listFinder = find.byValueKey('hacker_news_list');
+    final SerializableFinder itemFinder = find.byValueKey('load_more_button');
 
     setUpAll(() async {
       driver = await FlutterDriver.connect();

@@ -7,13 +7,12 @@ import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
 class Item {
-  dynamic data;
-
   Item.fromJson(this.data);
+  dynamic data;
 }
 
 Future<Item> fetchItem(http.Client client) async {
-  final response = await client
+  final http.Response response = await client
       .get(Uri.parse('https://api.hnpwa.com/v0/item/21812041.json'));
 
   if (response.statusCode == 200) {
@@ -28,7 +27,7 @@ class MockClient extends Mock implements http.Client {}
 main() {
   group('fetchNewsItems', () {
     test('return a Item if the http call completes successfully', () async {
-      final client = MockClient();
+      final MockClient client = MockClient();
 
       when(client.get(Uri.parse('https://api.hnpwa.com/v0/item/21812041.json')))
           .thenAnswer((_) async => http.Response(
@@ -39,7 +38,7 @@ main() {
     });
 
     test('throwns an exception if the http call completes with an error', () {
-      final client = MockClient();
+      final MockClient client = MockClient();
 
       when(client.get(Uri.parse('https://api.hnpwa.com/v0/item/21812041.json')))
           .thenAnswer((_) async => http.Response('Not Found', 400));

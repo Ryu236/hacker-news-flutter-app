@@ -17,13 +17,13 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.orange,
       ),
-      home: MyHomePage(title: 'Hacker News App'),
+      home: const MyHomePage(title: 'Hacker News App'),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
+  const MyHomePage({Key key, this.title}) : super(key: key);
 
   final String title;
 
@@ -53,8 +53,8 @@ class Item {
 
 class _MyHomePageState extends State<MyHomePage> {
   final List<Item> _items = <Item>[];
-  final _biggerFont = const TextStyle(fontSize: 18.0);
-  var _pageIndex = 1;
+  final TextStyle _biggerFont = const TextStyle(fontSize: 18.0);
+  int _pageIndex = 1;
 
   @override
   void initState() {
@@ -68,9 +68,9 @@ class _MyHomePageState extends State<MyHomePage> {
           .get(Uri.parse('https://api.hnpwa.com/v0/news/$index.json'));
       final dynamic data = json.decode(utf8.decode(res.bodyBytes));
       setState(() {
-        final items = data as List;
+        final List items = data as List;
         for (dynamic element in items) {
-          final item = element as Map;
+          final Map item = element as Map;
           _items.add(Item(
             title: item['title'] as String,
             points: item['points'] as int,
@@ -87,10 +87,10 @@ class _MyHomePageState extends State<MyHomePage> {
         context: context,
         builder: (BuildContext context) {
           return const SimpleDialog(
-            title: const Text('Error occurred'),
+            title: Text('Error occurred'),
             children: <Widget>[
               SimpleDialogOption(
-                child: const Text('Sorry, couldn\'t load items.'),
+                child: Text('Sorry, couldn\'t load items.'),
               )
             ],
           );
@@ -112,12 +112,12 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget _buildItems() {
     return RefreshIndicator(
       child: ListView.builder(
-        key: Key('hacker_news_list'),
+        key: const Key('hacker_news_list'),
         padding: const EdgeInsets.all(8.0),
         itemBuilder: (BuildContext context, int index) {
-          final i = index ~/ 2;
+          final int i = index ~/ 2;
           // Add a line between item in list.
-          if (index.isOdd) return Divider();
+          if (index.isOdd) return const Divider();
           if (i == _items.length) {
             // Add a button to load more items.
             return Container(
@@ -166,7 +166,8 @@ class _MyHomePageState extends State<MyHomePage> {
       onTap: () {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => WebViewPage(url: item.url)),
+          MaterialPageRoute(
+              builder: (BuildContext context) => WebViewPage(url: item.url)),
         );
       },
     );
@@ -174,7 +175,7 @@ class _MyHomePageState extends State<MyHomePage> {
 }
 
 class WebViewPage extends StatefulWidget {
-  WebViewPage({Key key, @required this.url}) : super(key: key);
+  const WebViewPage({Key key, @required this.url}) : super(key: key);
   final String url;
 
   @override
@@ -182,17 +183,14 @@ class WebViewPage extends StatefulWidget {
 }
 
 class _WebViewPageState extends State<WebViewPage> {
-  final Completer<WebViewController> _controller =
-      Completer<WebViewController>();
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("WebView"),
+        title: const Text('WebView'),
         actions: <Widget>[
           IconButton(
-            icon: Icon(Icons.share),
+            icon: const Icon(Icons.share),
             onPressed: () {
               Share.share(widget.url);
             },
@@ -200,10 +198,10 @@ class _WebViewPageState extends State<WebViewPage> {
         ],
       ),
       body: WebView(
-        initialUrl: (widget.url),
+        initialUrl: widget.url,
         javascriptMode: JavascriptMode.unrestricted,
         onWebViewCreated: (WebViewController webViewController) {
-          print("WebView Created!");
+          print('WebView Created!');
         },
       ),
     );
