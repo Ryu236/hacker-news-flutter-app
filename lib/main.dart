@@ -32,14 +32,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class Item {
-  final String title;
-  final int points;
-  final String user;
-  final String timeAgo;
-  final int commentsCount;
-  final String url;
-  final String domain;
-
   Item({
     this.title,
     this.points,
@@ -49,6 +41,14 @@ class Item {
     this.url,
     this.domain,
   });
+
+  final String title;
+  final int points;
+  final String user;
+  final String timeAgo;
+  final int commentsCount;
+  final String url;
+  final String domain;
 }
 
 class _MyHomePageState extends State<MyHomePage> {
@@ -68,9 +68,9 @@ class _MyHomePageState extends State<MyHomePage> {
           .get(Uri.parse('https://api.hnpwa.com/v0/news/$index.json'));
       final dynamic data = json.decode(utf8.decode(res.bodyBytes));
       setState(() {
-        final List items = data as List;
+        final List<Item> items = data as List<Item>;
         for (dynamic element in items) {
-          final Map item = element as Map;
+          final Map<String, Object> item = element as Map<String, Object>;
           _items.add(Item(
             title: item['title'] as String,
             points: item['points'] as int,
@@ -166,7 +166,7 @@ class _MyHomePageState extends State<MyHomePage> {
       onTap: () {
         Navigator.push(
           context,
-          MaterialPageRoute(
+          MaterialPageRoute<WebViewPage>(
               builder: (BuildContext context) => WebViewPage(url: item.url)),
         );
       },
