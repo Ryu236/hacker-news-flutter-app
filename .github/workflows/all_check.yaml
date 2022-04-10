@@ -21,21 +21,20 @@ jobs:
         with:
           channel: stable
           cache: true
+      - name: Cache pubspec dependencies
+        uses: actions/cache@v3
+        with:
+          path: |
+            ${{ env.FLUTTER_HOME }}/.pub-cache
+            **/.packages
+            **/.flutter-plugins
+            **/.flutter-plugin-dependencies
+            **/.dart_tool/package_config.json
+          key: build-pubspec-${{ hashFiles('**/pubspec.lock') }}
+      - name: Pub Get
+        run: flutter pub get
       - name: Run Analyze
         run: dart analyze . --fatal-infos
-
-  pub_get_check:
-    timeout-minutes: 30
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: Setup Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          channel: stable
-          cache: true
-      - name: Flutter Pub Get
-        run: flutter pub get
 
   format:
     timeout-minutes: 30
@@ -47,6 +46,16 @@ jobs:
         with:
           channel: stable
           cache: true
+      - name: Cache pubspec dependencies
+        uses: actions/cache@v3
+        with:
+          path: |
+            ${{ env.FLUTTER_HOME }}/.pub-cache
+            **/.packages
+            **/.flutter-plugins
+            **/.flutter-plugin-dependencies
+            **/.dart_tool/package_config.json
+          key: build-pubspec-${{ hashFiles('**/pubspec.lock') }}
       - name: Flutter Format
         run: flutter format .
 
@@ -60,5 +69,15 @@ jobs:
         with:
           channel: stable
           cache: true
+      - name: Cache pubspec dependencies
+        uses: actions/cache@v3
+        with:
+          path: |
+            ${{ env.FLUTTER_HOME }}/.pub-cache
+            **/.packages
+            **/.flutter-plugins
+            **/.flutter-plugin-dependencies
+            **/.dart_tool/package_config.json
+          key: build-pubspec-${{ hashFiles('**/pubspec.lock') }}
       - name: Flutter Test
-        run: flutter test --no-pub -v
+        run: flutter test
