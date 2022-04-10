@@ -8,6 +8,7 @@ import 'package:test/test.dart';
 
 class Item {
   Item.fromJson(this.data);
+
   dynamic data;
 }
 
@@ -24,7 +25,7 @@ Future<Item> fetchItem(http.Client client) async {
 
 class MockClient extends Mock implements http.Client {}
 
-main() {
+void main() {
   group('fetchNewsItems', () {
     test('return a Item if the http call completes successfully', () async {
       final MockClient client = MockClient();
