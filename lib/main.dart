@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -23,7 +24,7 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key key, this.title}) : super(key: key);
+  const MyHomePage({Key? key, required this.title}) : super(key: key);
 
   final String title;
 
@@ -33,20 +34,20 @@ class MyHomePage extends StatefulWidget {
 
 class Item {
   Item({
-    this.title,
-    this.points,
-    this.user,
-    this.timeAgo,
-    this.commentsCount,
-    this.url,
-    this.domain,
+    required this.title,
+    required this.points,
+    required this.user,
+    required this.timeAgo,
+    required this.commentsCount,
+    required this.url,
+    required this.domain,
   });
 
   final String title;
-  final int points;
+  final int? points;
   final String user;
   final String timeAgo;
-  final int commentsCount;
+  final int? commentsCount;
   final String url;
   final String domain;
 }
@@ -66,23 +67,25 @@ class _MyHomePageState extends State<MyHomePage> {
     try {
       final http.Response res = await http
           .get(Uri.parse('https://api.hnpwa.com/v0/news/$index.json'));
-      final dynamic data = json.decode(utf8.decode(res.bodyBytes));
+      final List<dynamic> data =
+          json.decode(utf8.decode(res.bodyBytes)) as List<dynamic>;
       setState(() {
-        final List<Item> items = data as List<Item>;
-        for (dynamic element in items) {
-          final Map<String, Object> item = element as Map<String, Object>;
+        for (dynamic element in data) {
+          final Map<String, Object> item =
+              element.cast<String, Object>() as Map<String, Object>;
           _items.add(Item(
-            title: item['title'] as String,
-            points: item['points'] as int,
-            user: item['user'] as String,
-            timeAgo: item['time_ago'] as String,
-            commentsCount: item['comment_count'] as int,
-            url: item['url'] as String,
-            domain: item['domain'] as String,
+            title: item['title'].toString(),
+            points: item['points'] as int?,
+            user: item['user'].toString(),
+            timeAgo: item['time_ago'].toString(),
+            commentsCount: item['comment_count'] as int?,
+            url: item['url'].toString(),
+            domain: item['domain'].toString(),
           ));
         }
       });
     } catch (e) {
+      print(e.toString());
       showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -147,7 +150,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Widget _buildRow(BuildContext context, Item item) {
-    Text subTitle;
+    Text? subTitle;
     if (item.domain != null && item.points != null) {
       subTitle = Text(item.domain + '・' + item.points.toString() + 'points');
     } else if (item.domain != null && item.points == null) {
@@ -175,7 +178,7 @@ class _MyHomePageState extends State<MyHomePage> {
 }
 
 class WebViewPage extends StatefulWidget {
-  const WebViewPage({Key key, @required this.url}) : super(key: key);
+  const WebViewPage({Key? key, required this.url}) : super(key: key);
   final String url;
 
   @override
@@ -183,6 +186,17 @@ class WebViewPage extends StatefulWidget {
 }
 
 class _WebViewPageState extends State<WebViewPage> {
+  late final WebViewController controller;
+
+  @override
+  void initState() {
+    super.initState();
+    controller = WebViewController()
+      ..loadRequest(
+        Uri.parse(widget.url),
+      );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -197,12 +211,8 @@ class _WebViewPageState extends State<WebViewPage> {
           ),
         ],
       ),
-      body: WebView(
-        initialUrl: widget.url,
-        javascriptMode: JavascriptMode.unrestricted,
-        onWebViewCreated: (WebViewController webViewController) {
-          print('WebView Created!');
-        },
+      body: WebViewWidget(
+        controller: controller,
       ),
     );
   }
