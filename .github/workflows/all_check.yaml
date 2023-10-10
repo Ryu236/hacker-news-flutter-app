@@ -56,8 +56,8 @@ jobs:
             **/.flutter-plugin-dependencies
             **/.dart_tool/package_config.json
           key: build-pubspec-${{ hashFiles('**/pubspec.lock') }}
-      - name: Flutter Format
-        run: flutter format .
+      - name: Dart Format
+        run: dart format .
 
   test:
     timeout-minutes: 30
