@@ -3,8 +3,10 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
+import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
+import 'http_test.mocks.dart';
 
 class Item {
   Item.fromJson(this.data);
@@ -23,8 +25,7 @@ Future<Item> fetchItem(http.Client client) async {
   }
 }
 
-class MockClient extends Mock implements http.Client {}
-
+@GenerateMocks([http.Client])
 void main() {
   group('fetchNewsItems', () {
     test('return a Item if the http call completes successfully', () async {
